@@ -1,0 +1,28 @@
+{
+  "name": "bybit-js",
+  "version": "1.0.0",
+  "description": "Javascript module for ByBit Exchange API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmcnab57/Bybit-JS.git"
+  },
+  "keywords": [
+    "bybit",
+    "javascript",
+    "cryptocurrency"
+  ],
+  "author": "Jordy McNab",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmcnab57/Bybit-JS/issues"
+  },
+  "homepage": "https://github.com/jmcnab57/Bybit-JS#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "ws": "^7.1.1"
+  }
+}
