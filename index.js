@@ -7,14 +7,14 @@ const Errors = {
 	invalidField: new Error("Invalid Request Paramater")
 };
 
-export default class Bybit {
-	constructor(key, secret, mainnet = false, timeout = 1000) {
+export default class ByBit {
+	constructor(key, secret, mainnet = false, timeout = 5000) {
 		this.apiKey = key;
 		this.apiSecret = secret;
 		this.url = mainnet ? "https://api.bybit.com" : "https://api-testnet.bybit.com";
 		this.axios = axios.create({
 			baseURL: this.url,
-			timeout: 5000,
+			timeout: timeout,
 			headers: {
 				"Content-Type": "application/json"
 			}
