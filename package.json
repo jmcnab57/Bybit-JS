@@ -23,6 +23,7 @@
   "homepage": "https://github.com/jmcnab57/Bybit-JS#readme",
   "dependencies": {
     "axios": "^0.19.0",
+    "lodash": "^4.17.15",
     "ws": "^7.1.1"
   }
 }

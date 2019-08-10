@@ -148,7 +148,7 @@ export default class Bybit {
 
 	updateLeverage() {
 		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrder(data)) {
+			if (Validate.updateLeverage(data)) {
 				this._handleRequest(data, "/user/leverage/save")
 					.then(resolve)
 					.catch(reject);
@@ -158,7 +158,7 @@ export default class Bybit {
 		});
 	}
 
-	getPosition() {
+	getPositions() {
 		return new Promise((resolve, reject) => {
 			this._handleRequest(data, "/position/list")
 				.then(resolve)
@@ -168,7 +168,7 @@ export default class Bybit {
 
 	updatePositionMargin() {
 		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrder(data)) {
+			if (Validate.updatePositionMargin(data)) {
 				this._handleRequest(data, "/position/change-position-margin")
 					.then(resolve)
 					.catch(reject);
@@ -180,7 +180,7 @@ export default class Bybit {
 
 	getFundingRate() {
 		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrder(data)) {
+			if (Validate.getFundingRate(data)) {
 				this._handleRequest(data, "/open-api/funding/prev-funding-rate")
 					.then(resolve)
 					.catch(reject);
@@ -192,7 +192,7 @@ export default class Bybit {
 
 	getPrevFundingRate() {
 		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrder(data)) {
+			if (Validate.getPrevFundingRate(data)) {
 				this._handleRequest(data, "/open-api/funding/prev-funding")
 					.then(resolve)
 					.catch(reject);
@@ -204,7 +204,7 @@ export default class Bybit {
 
 	getNextFundingRate() {
 		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrder(data)) {
+			if (Validate.getNextFundingRate(data)) {
 				this._handleRequest(data, "/open-api/funding/predicted-funding")
 					.then(resolve)
 					.catch(reject);
@@ -216,7 +216,7 @@ export default class Bybit {
 
 	getOrderInfo() {
 		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrder(data)) {
+			if (Validate.getOrderInfo(data)) {
 				this._handleRequest(data, "/v2/private/execution/list")
 					.then(resolve)
 					.catch(reject);
