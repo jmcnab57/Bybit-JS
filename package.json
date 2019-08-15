@@ -1,29 +1,38 @@
 {
-  "name": "bybit-js",
-  "version": "1.0.0",
-  "description": "Javascript module for ByBit Exchange API",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jmcnab57/Bybit-JS.git"
-  },
-  "keywords": [
-    "bybit",
-    "javascript",
-    "cryptocurrency"
-  ],
-  "author": "Jordy McNab",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jmcnab57/Bybit-JS/issues"
-  },
-  "homepage": "https://github.com/jmcnab57/Bybit-JS#readme",
-  "dependencies": {
-    "axios": "^0.19.0",
-    "lodash": "^4.17.15",
-    "ws": "^7.1.1"
-  }
+	"name": "bybit-js",
+	"version": "1.0.0",
+	"description": "Javascript module for ByBit Exchange API",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "jest",
+		"build": "babel src --out-dir build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jmcnab57/Bybit-JS.git"
+	},
+	"keywords": [
+		"bybit",
+		"javascript",
+		"cryptocurrency"
+	],
+	"author": "Jordy McNab",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/jmcnab57/Bybit-JS/issues"
+	},
+	"homepage": "https://github.com/jmcnab57/Bybit-JS#readme",
+	"dependencies": {
+		"axios": "^0.19.0",
+		"lodash": "^4.17.15",
+		"ws": "^7.1.1"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.5.5",
+		"@babel/core": "^7.5.5",
+		"@babel/preset-env": "^7.5.5",
+		"@types/jest": "^24.0.17",
+		"babel-jest": "^24.8.0",
+		"jest": "^24.8.0"
+	}
 }

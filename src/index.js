@@ -1,7 +1,7 @@
 import * as Validate from "./validateData.js";
 import axios from "axios";
 import Websocket from "./websocket";
-import { createHash } from "crypto";
+import { createHmac } from "crypto";
 
 const Errors = {
 	invalidField: new Error("Invalid Request Paramater")
@@ -24,28 +24,37 @@ export default class ByBit {
 
 	//Returns a HEX HMAC_SHA256 of the message
 	_signMessage(message) {
-		return Crypto.createHmac("sha256", this.apiSecret)
+		return createHmac("sha256", this.apiSecret)
 			.update(message)
 			.digest("hex");
 	}
 
 	// Calls functions to validate data, create message string, sign message and then submits/waits for response from ByBit API.
-	_handleRequest(data, url) {
+	_handleRequest(data = {}, url, type = "get") {
 		return new Promise((resolve, reject) => {
-			let message = this._createMessage(data);
+			const timestamp = Date.now();
+			let message = this._createMessage({ ...data, api_key: this.apiKey, timestamp });
 			let signed = this._signMessage(message);
-			let parameters = { ...data, sign: signed };
-			this.axios
-				.get(url, { params: parameters })
+			let ordered = this._sortObj(data);
+			let parameters = { api_key: this.apiKey, ...ordered, timestamp, sign: signed };
+			this.axios({ method: type, url: url, params: parameters })
 				.then((response) => {
-					resolve(response);
+					resolve(response.data);
 				})
 				.catch((error) => {
 					reject(this._handleRequestError(error));
 				});
 		});
 	}
-
+	_sortObj(data) {
+		const ordered = {};
+		Object.keys(data)
+			.sort()
+			.forEach(function(key) {
+				ordered[key] = data[key];
+			});
+		return ordered;
+	}
 	_handleRequestError(error) {
 		if (error.response) {
 			console.log(error.response.data);
@@ -69,7 +78,7 @@ export default class ByBit {
 	placeActiveOrder(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.placeActiveOrder(data)) {
-				this._handleRequest(data, "/open-api/order/create")
+				this._handleRequest(data, "/open-api/order/create", "post")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -78,7 +87,7 @@ export default class ByBit {
 		});
 	}
 
-	getActiveOrders() {
+	getActiveOrders(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getActiveOrders(data)) {
 				this._handleRequest(data, "/open-api/order/list")
@@ -90,10 +99,10 @@ export default class ByBit {
 		});
 	}
 
-	cancelActiveOrder() {
+	cancelActiveOrder(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.cancelActiveOrder(data)) {
-				this._handleRequest(data, "/open-api/order/cancel")
+				this._handleRequest(data, "/open-api/order/cancel", "post")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -102,10 +111,10 @@ export default class ByBit {
 		});
 	}
 
-	placeConditionalOrder() {
+	placeConditionalOrder(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.placeConditionalOrder(data)) {
-				this._handleRequest(data, "/open-api/stop-order/create")
+				this._handleRequest(data, "/open-api/stop-order/create", "post")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -114,7 +123,7 @@ export default class ByBit {
 		});
 	}
 
-	getConditionalOrders() {
+	getConditionalOrders(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getConditionalOrders(data)) {
 				this._handleRequest(data, "/open-api/stop-order/list")
@@ -126,10 +135,10 @@ export default class ByBit {
 		});
 	}
 
-	cancelConditionalOrder() {
+	cancelConditionalOrder(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.cancelConditionalOrder(data)) {
-				this._handleRequest(data, "/open-api/stop-order/cancel")
+				this._handleRequest(data, "/open-api/stop-order/cancel", "post")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -138,18 +147,22 @@ export default class ByBit {
 		});
 	}
 
-	getLeverage() {
+	getLeverage(data) {
 		return new Promise((resolve, reject) => {
-			this._handleRequest(data, "/user/leverage")
-				.then(resolve)
-				.catch(reject);
+			if (Validate.getLeverage(data)) {
+				this._handleRequest(data, "/user/leverage")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
 		});
 	}
 
-	updateLeverage() {
+	updateLeverage(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.updateLeverage(data)) {
-				this._handleRequest(data, "/user/leverage/save")
+				this._handleRequest(data, "/user/leverage/save", "post")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -158,18 +171,22 @@ export default class ByBit {
 		});
 	}
 
-	getPositions() {
+	getPositions(data) {
 		return new Promise((resolve, reject) => {
-			this._handleRequest(data, "/position/list")
-				.then(resolve)
-				.catch(reject);
+			if (Validate.getLeverage(data)) {
+				this._handleRequest(data, "/position/list")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
 		});
 	}
 
-	updatePositionMargin() {
+	updatePositionMargin(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.updatePositionMargin(data)) {
-				this._handleRequest(data, "/position/change-position-margin")
+				this._handleRequest(data, "/position/change-position-margin", "post")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -178,7 +195,7 @@ export default class ByBit {
 		});
 	}
 
-	getFundingRate() {
+	getFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getFundingRate(data)) {
 				this._handleRequest(data, "/open-api/funding/prev-funding-rate")
@@ -190,7 +207,7 @@ export default class ByBit {
 		});
 	}
 
-	getPrevFundingRate() {
+	getPrevFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getPrevFundingRate(data)) {
 				this._handleRequest(data, "/open-api/funding/prev-funding")
@@ -202,7 +219,7 @@ export default class ByBit {
 		});
 	}
 
-	getNextFundingRate() {
+	getNextFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getNextFundingRate(data)) {
 				this._handleRequest(data, "/open-api/funding/predicted-funding")
@@ -214,7 +231,7 @@ export default class ByBit {
 		});
 	}
 
-	getOrderInfo() {
+	getOrderInfo(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getOrderInfo(data)) {
 				this._handleRequest(data, "/v2/private/execution/list")

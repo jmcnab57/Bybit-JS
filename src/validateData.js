@@ -6,7 +6,7 @@ export function placeActiveOrder(data) {
 		symbol: "string",
 		order_type: "string",
 		qty: "number",
-		price: "number",
+		price: typeof data["price"] == "string" ? "string" : "number",
 		time_in_force: "string"
 	};
 	let optional = {
@@ -50,7 +50,7 @@ export function placeConditionalOrder(data) {
 		symbol: "string",
 		order_type: "string",
 		qty: "number",
-		price: "number",
+		price: typeof data["price"] == "string" ? "string" : "number",
 		base_price: "number",
 		stop_px: "number",
 		time_in_force: "string"
@@ -86,7 +86,7 @@ export function getLeverage(data) {
 	return isNil(data) ? true : false;
 }
 
-export function updateLeverage() {
+export function updateLeverage(data) {
 	let required = {
 		symbol: "string",
 		leverage: "string"
