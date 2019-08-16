@@ -313,6 +313,32 @@ function () {
         }
       });
     }
+  }, {
+    key: "getSymbols",
+    value: function getSymbols(data) {
+      var _this16 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (Validate.getSymbols(data)) {
+          _this16._handleRequest(data, "v2/public/symbols").then(resolve)["catch"](reject);
+        } else {
+          reject(Errors.invalidField);
+        }
+      });
+    }
+  }, {
+    key: "getKline",
+    value: function getKline(data) {
+      var _this17 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (Validate.getKline(data)) {
+          _this17._handleRequest(data, "v2/public/kline/list").then(resolve)["catch"](reject);
+        } else {
+          reject(Errors.invalidField);
+        }
+      });
+    }
   }]);
 
   return ByBit;

@@ -17,6 +17,8 @@ exports.getFundingRate = getFundingRate;
 exports.getPrevFundingRate = getPrevFundingRate;
 exports.getNextFundingRate = getNextFundingRate;
 exports.getOrderInfo = getOrderInfo;
+exports.getSymbols = getSymbols;
+exports.getKline = getKline;
 
 var _lodash = require("lodash");
 
@@ -153,6 +155,22 @@ function getOrderInfo(data) {
     order_id: "string"
   };
   return validateRequired(required, data);
+}
+
+function getSymbols(data) {
+  return (0, _lodash.isNil)(data) ? true : false;
+}
+
+function getKline(data) {
+  var required = {
+    symbol: "string",
+    interval: "string",
+    from: "number"
+  };
+  var optional = {
+    limit: "number"
+  };
+  return validateOptional(optional, data) && validateRequired(required, data);
 }
 
 function validateRequired(required, data) {

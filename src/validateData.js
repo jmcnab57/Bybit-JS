@@ -134,6 +134,21 @@ export function getOrderInfo(data) {
 	return validateRequired(required, data);
 }
 
+export function getSymbols(data) {
+	return isNil(data) ? true : false;
+}
+export function getKline(data) {
+	let required = {
+		symbol: "string",
+		interval: "string",
+		from: "number"
+	};
+	let optional = {
+		limit: "number"
+	};
+	return validateOptional(optional, data) && validateRequired(required, data);
+}
+
 function validateRequired(required, data) {
 	if (!isNil(data)) {
 		for (const property in required) {

@@ -76,7 +76,7 @@ test("Test Get Leverage", function () {
 test("Test Update Leverage", function () {
   return ByBit.updateLeverage({
     symbol: "ETHUSD",
-    leverage: "1"
+    leverage: "".concat(Math.random() * (100 - 1) + 1)
   }).then(function (result) {
     expect(result["ret_code"]).toBe(0);
   });
@@ -119,7 +119,21 @@ test("Test Get Order Info", function () {
   return ByBit.getOrderInfo({
     order_id: "d854bb13-3fb9-4608-ade4-828f50210778"
   }).then(function (result) {
-    console.log(result);
+    expect(result["ret_code"]).toBe(0);
+  });
+});
+test("Test Get Symbols", function () {
+  return ByBit.getSymbols().then(function (result) {
+    expect(result["ret_code"]).toBe(0);
+  });
+});
+test("Test Get Kline", function () {
+  return ByBit.getKline({
+    symbol: "ETHUSD",
+    interval: "1",
+    from: 1,
+    limit: 200
+  }).then(function (result) {
     expect(result["ret_code"]).toBe(0);
   });
 });

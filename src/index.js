@@ -242,4 +242,27 @@ export default class ByBit {
 			}
 		});
 	}
+
+	getSymbols(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.getSymbols(data)) {
+				this._handleRequest(data, "v2/public/symbols")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
+	getKline(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.getKline(data)) {
+				this._handleRequest(data, "v2/public/kline/list")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
 }

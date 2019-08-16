@@ -4,7 +4,7 @@
 	"description": "Javascript module for ByBit Exchange API",
 	"main": "src/index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "jest ./src",
 		"build": "babel src --out-dir build"
 	},
 	"repository": {
