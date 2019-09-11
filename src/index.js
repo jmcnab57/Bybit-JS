@@ -11,9 +11,10 @@ export default class ByBit {
 	constructor(key, secret, mainnet = false, timeout = 5000) {
 		this.apiKey = key;
 		this.apiSecret = secret;
-		this.url = mainnet ? "https://api.bybit.com" : "https://api-testnet.bybit.com";
+		this.restUrl = mainnet ? "https://api.bybit.com" : "https://api-testnet.bybit.com";
+		this.socketUrl = mainnet ? "wss://stream.bybit.com/realtime" : "wss://stream-testnet.bybit.com/realtime";
 		this.axios = axios.create({
-			baseURL: this.url,
+			baseURL: this.restUrl,
 			timeout: timeout,
 			headers: {
 				"Content-Type": "application/json"
