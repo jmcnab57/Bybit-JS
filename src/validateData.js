@@ -148,6 +148,15 @@ export function getKline(data) {
 	};
 	return validateOptional(optional, data) && validateRequired(required, data);
 }
+export function getTickers(data) {
+	return isNil(data) ? true : false;
+}
+export function getOrderbook(data) {
+	let required = {
+		symbol: "string"
+	};
+	return validateRequired(required, data);
+}
 
 function validateRequired(required, data) {
 	if (!isNil(data)) {
