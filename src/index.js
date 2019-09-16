@@ -266,4 +266,28 @@ export default class ByBit {
 			}
 		});
 	}
+	getTickers(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.getTickers(data)) {
+				this._handleRequest({}, "v2/public/tickers")
+					.then(resolve)
+					.catch(reject);
+					//r => {return r.find(d => d.symbol === symbol)}
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
+	getOrderbook(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.getOrderbook(data)) {
+				this._handleRequest(data, "v2/public/orderBook/L2")
+					.then(resolve)
+					.catch(reject);
+					//r => {return r.find(d => d.symbol === symbol)}
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
 }
