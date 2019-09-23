@@ -1,7 +1,7 @@
 import * as Validate from "./validateData.js";
 import axios from "axios";
-import Websocket from "./websocket";
 import { createHmac } from "crypto";
+const WebSocket = require('ws');
 
 const Errors = {
 	invalidField: new Error("Invalid Request Paramater")
@@ -20,8 +20,40 @@ export default class ByBit {
 				"Content-Type": "application/json"
 			}
 		});
-		this.websocket = null;
+		this.subscriptions = {};
+		this._initWebsocket();
+		// TODO this.websocket.onclose
 	}
+
+	_initWebsocket(){
+		let expires = new Date().getTime() + 10000;
+		let signature = this._signMessage('GET/realtime' + expires);
+		let param = `api_key=${this.apiKey}&expires=${expires}&signature=${signature}`;
+		this.websocket = new WebSocket(`${this.socketUrl}?${param}`);
+		this.websocket.onmessage = function(msg) { this._handleWebsocketMsg(msg) }.bind(this);
+		this.websocket.onerror = function(msg){ console.log("Websocket Error", msg) };
+	}
+
+    _handleWebsocketMsg(msg) {
+        let data = JSON.parse(msg.data)
+        if (data.success == false) {
+            console.log("WS ERROR", msg.data)
+            return false
+        } 
+        if ('request' in data) {
+            // let req = data.request;
+            // if ('op' in req && 'args' in req)  {
+            //     console.log("> Subscribed to", req.args[0])
+            // }
+        } else if ('topic' in data) {
+			let topic = this.subscriptions[data.topic] //.split('.')[0]];
+			for (var key in topic)	{
+				topic[key](data.data);
+			}
+        } else {
+            console.log(data)
+        }
+    }
 
 	//Returns a HEX HMAC_SHA256 of the message
 	_signMessage(message) {
@@ -74,6 +106,23 @@ export default class ByBit {
 			.map((key) => key + "=" + data[key])
 			.sort()
 			.join("&");
+	}
+
+	subscribeTo(args, callback){
+		const key = new Date().getTime();
+		if (args in this.subscriptions){
+			this.subscriptions[args][key] = callback;
+		}else{
+			let subscr = {}
+			subscr[key] = callback
+			this.subscriptions[args]=subscr;
+			this.websocket.send(`{"op":"subscribe","args":["${args}"]}`);
+		}
+		return key
+	}
+
+	unsubscribe(args, id) {
+		delete this.subscriptions[args][id];
 	}
 
 	placeActiveOrder(data) {
