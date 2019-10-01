@@ -24,16 +24,14 @@ export default class ByBit {
 		this._initWebsocket();
 		// TODO this.websocket.onclose
 	}
-
 	_initWebsocket(){
 		let expires = new Date().getTime() + 10000;
 		let signature = this._signMessage('GET/realtime' + expires);
 		let param = `api_key=${this.apiKey}&expires=${expires}&signature=${signature}`;
 		this.websocket = new WebSocket(`${this.socketUrl}?${param}`);
-		this.websocket.onmessage = function(msg) { this._handleWebsocketMsg(msg) }.bind(this);
-		this.websocket.onerror = function(msg){ console.log("Websocket Error", msg) };
+		this.websocket.onmessage = (msg) => this._handleWebsocketMsg(msg).bind(this);
+		this.websocket.onerror = (msg) => console.log("Websocket Error", msg);
 	}
-
     _handleWebsocketMsg(msg) {
         let data = JSON.parse(msg.data)
         if (data.success == false) {
@@ -47,14 +45,12 @@ export default class ByBit {
             // }
         } else if ('topic' in data) {
 			let topic = this.subscriptions[data.topic] //.split('.')[0]];
-			for (var key in topic)	{
+			for (var key in topic)
 				topic[key](data.data);
-			}
         } else {
             console.log(data)
         }
     }
-
 	//Returns a HEX HMAC_SHA256 of the message
 	_signMessage(message) {
 		return createHmac("sha256", this.apiSecret)
@@ -244,7 +240,17 @@ export default class ByBit {
 			}
 		});
 	}
-
+	setTradingStop(data){
+		return new Promise((resolve, reject) => {
+			if (Validate.setTradingStop(data)) {
+				this._handleRequest(data, "/open-api/position/trading-stop")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});		
+	}
 	getFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getFundingRate(data)) {

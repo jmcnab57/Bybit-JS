@@ -75,6 +75,18 @@ export function getConditionalOrders(data) {
 	return validateOptional(optional, data);
 }
 
+export function setTradingStop(data) {
+	let required = {
+		symbol: "string"
+	};
+	let optional = {
+		take_profit: "string",
+		stop_loss: "string",
+		trailing_stop: "string",
+	};
+	return validateOptional(optional, data)  && validateRequired(required, data);
+}
+
 export function cancelConditionalOrder(data) {
 	let required = {
 		stop_order_id: "string"
