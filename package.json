@@ -2,7 +2,7 @@
 	"name": "bybit-js",
 	"version": "1.0.0",
 	"description": "Javascript module for ByBit Exchange API",
-	"main": "src/index.js",
+	"main": "build/index.js",
 	"scripts": {
 		"test": "jest ./src",
 		"build": "babel src --out-dir build"
