@@ -64,8 +64,6 @@ var ByBit = /*#__PURE__*/function () {
   _createClass(ByBit, [{
     key: "_initWebsocket",
     value: function _initWebsocket() {
-      var _this = this;
-
       var expires = new Date().getTime() + 10000;
 
       var signature = this._signMessage('GET/realtime' + expires);
@@ -74,11 +72,11 @@ var ByBit = /*#__PURE__*/function () {
       this.websocket = new WebSocket("".concat(this.socketUrl, "?").concat(param));
 
       this.websocket.onmessage = function (msg) {
-        return _this._handleWebsocketMsg(msg).bind(_this);
-      };
+        this._handleWebsocketMsg(msg);
+      }.bind(this);
 
       this.websocket.onerror = function (msg) {
-        return console.log("Websocket Error", msg);
+        console.log("Websocket Error", msg);
       };
     }
   }, {
@@ -115,7 +113,7 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "_handleRequest",
     value: function _handleRequest() {
-      var _this2 = this;
+      var _this = this;
 
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var url = arguments.length > 1 ? arguments[1] : undefined;
@@ -123,30 +121,30 @@ var ByBit = /*#__PURE__*/function () {
       return new Promise(function (resolve, reject) {
         var timestamp = Date.now();
 
-        var message = _this2._createMessage(_objectSpread({}, data, {
-          api_key: _this2.apiKey,
+        var message = _this._createMessage(_objectSpread({}, data, {
+          api_key: _this.apiKey,
           timestamp: timestamp
         }));
 
-        var signed = _this2._signMessage(message);
+        var signed = _this._signMessage(message);
 
-        var ordered = _this2._sortObj(data);
+        var ordered = _this._sortObj(data);
 
         var parameters = _objectSpread({
-          api_key: _this2.apiKey
+          api_key: _this.apiKey
         }, ordered, {
           timestamp: timestamp,
           sign: signed
         });
 
-        _this2.axios({
+        _this.axios({
           method: type,
           url: url,
           params: parameters
         }).then(function (response) {
           resolve(response.data);
         })["catch"](function (error) {
-          reject(_this2._handleRequestError(error));
+          reject(_this._handleRequestError(error));
         });
       });
     }
@@ -205,11 +203,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "placeActiveOrder",
     value: function placeActiveOrder(data) {
-      var _this3 = this;
+      var _this2 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.placeActiveOrder(data)) {
-          _this3._handleRequest(data, "/open-api/order/create", "post").then(resolve)["catch"](reject);
+          _this2._handleRequest(data, "/open-api/order/create", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -218,11 +216,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getActiveOrders",
     value: function getActiveOrders(data) {
-      var _this4 = this;
+      var _this3 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getActiveOrders(data)) {
-          _this4._handleRequest(data, "/open-api/order/list").then(resolve)["catch"](reject);
+          _this3._handleRequest(data, "/open-api/order/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -231,11 +229,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "cancelActiveOrder",
     value: function cancelActiveOrder(data) {
-      var _this5 = this;
+      var _this4 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.cancelActiveOrder(data)) {
-          _this5._handleRequest(data, "/open-api/order/cancel", "post").then(resolve)["catch"](reject);
+          _this4._handleRequest(data, "/open-api/order/cancel", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -244,11 +242,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "placeConditionalOrder",
     value: function placeConditionalOrder(data) {
-      var _this6 = this;
+      var _this5 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.placeConditionalOrder(data)) {
-          _this6._handleRequest(data, "/open-api/stop-order/create", "post").then(resolve)["catch"](reject);
+          _this5._handleRequest(data, "/open-api/stop-order/create", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -257,11 +255,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getConditionalOrders",
     value: function getConditionalOrders(data) {
-      var _this7 = this;
+      var _this6 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getConditionalOrders(data)) {
-          _this7._handleRequest(data, "/open-api/stop-order/list").then(resolve)["catch"](reject);
+          _this6._handleRequest(data, "/open-api/stop-order/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -270,11 +268,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "cancelConditionalOrder",
     value: function cancelConditionalOrder(data) {
-      var _this8 = this;
+      var _this7 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.cancelConditionalOrder(data)) {
-          _this8._handleRequest(data, "/open-api/stop-order/cancel", "post").then(resolve)["catch"](reject);
+          _this7._handleRequest(data, "/open-api/stop-order/cancel", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -283,11 +281,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "cancelConditionalOrdersAll",
     value: function cancelConditionalOrdersAll(data) {
-      var _this9 = this;
+      var _this8 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.cancelConditionalOrdersAll(data)) {
-          _this9._handleRequest(data, "/v2/private/stop-order/cancelAll", "post").then(resolve)["catch"](reject);
+          _this8._handleRequest(data, "/v2/private/stop-order/cancelAll", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -296,11 +294,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getLeverage",
     value: function getLeverage(data) {
-      var _this10 = this;
+      var _this9 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getLeverage(data)) {
-          _this10._handleRequest(data, "/user/leverage").then(resolve)["catch"](reject);
+          _this9._handleRequest(data, "/user/leverage").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -309,11 +307,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "updateLeverage",
     value: function updateLeverage(data) {
-      var _this11 = this;
+      var _this10 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.updateLeverage(data)) {
-          _this11._handleRequest(data, "/user/leverage/save", "post").then(resolve)["catch"](reject);
+          _this10._handleRequest(data, "/user/leverage/save", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -322,11 +320,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getPositions",
     value: function getPositions(data) {
-      var _this12 = this;
+      var _this11 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getLeverage(data)) {
-          _this12._handleRequest(data, "/position/list").then(resolve)["catch"](reject);
+          _this11._handleRequest(data, "/position/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -335,11 +333,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "updatePositionMargin",
     value: function updatePositionMargin(data) {
-      var _this13 = this;
+      var _this12 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.updatePositionMargin(data)) {
-          _this13._handleRequest(data, "/position/change-position-margin", "post").then(resolve)["catch"](reject);
+          _this12._handleRequest(data, "/position/change-position-margin", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -348,11 +346,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "setTradingStop",
     value: function setTradingStop(data) {
-      var _this14 = this;
+      var _this13 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.setTradingStop(data)) {
-          _this14._handleRequest(data, "/open-api/position/trading-stop").then(resolve)["catch"](reject);
+          _this13._handleRequest(data, "/open-api/position/trading-stop").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -361,11 +359,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getFundingRate",
     value: function getFundingRate(data) {
-      var _this15 = this;
+      var _this14 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getFundingRate(data)) {
-          _this15._handleRequest(data, "/open-api/funding/prev-funding-rate").then(resolve)["catch"](reject);
+          _this14._handleRequest(data, "/open-api/funding/prev-funding-rate").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -374,11 +372,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getPrevFundingRate",
     value: function getPrevFundingRate(data) {
-      var _this16 = this;
+      var _this15 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getPrevFundingRate(data)) {
-          _this16._handleRequest(data, "/open-api/funding/prev-funding").then(resolve)["catch"](reject);
+          _this15._handleRequest(data, "/open-api/funding/prev-funding").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -387,11 +385,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getNextFundingRate",
     value: function getNextFundingRate(data) {
-      var _this17 = this;
+      var _this16 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getNextFundingRate(data)) {
-          _this17._handleRequest(data, "/open-api/funding/predicted-funding").then(resolve)["catch"](reject);
+          _this16._handleRequest(data, "/open-api/funding/predicted-funding").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -400,11 +398,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getOrderInfo",
     value: function getOrderInfo(data) {
-      var _this18 = this;
+      var _this17 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getOrderInfo(data)) {
-          _this18._handleRequest(data, "/v2/private/execution/list").then(resolve)["catch"](reject);
+          _this17._handleRequest(data, "/v2/private/execution/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -413,11 +411,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getSymbols",
     value: function getSymbols(data) {
-      var _this19 = this;
+      var _this18 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getSymbols(data)) {
-          _this19._handleRequest(data, "v2/public/symbols").then(resolve)["catch"](reject);
+          _this18._handleRequest(data, "v2/public/symbols").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -426,11 +424,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getKline",
     value: function getKline(data) {
-      var _this20 = this;
+      var _this19 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getKline(data)) {
-          _this20._handleRequest(data, "v2/public/kline/list").then(resolve)["catch"](reject);
+          _this19._handleRequest(data, "v2/public/kline/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -439,11 +437,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getTickers",
     value: function getTickers(data) {
-      var _this21 = this;
+      var _this20 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getTickers(data)) {
-          _this21._handleRequest({}, "v2/public/tickers").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
+          _this20._handleRequest({}, "v2/public/tickers").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
 
         } else {
           reject(Errors.invalidField);
@@ -453,11 +451,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getOrderbook",
     value: function getOrderbook(data) {
-      var _this22 = this;
+      var _this21 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getOrderbook(data)) {
-          _this22._handleRequest(data, "v2/public/orderBook/L2").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
+          _this21._handleRequest(data, "v2/public/orderBook/L2").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
 
         } else {
           reject(Errors.invalidField);

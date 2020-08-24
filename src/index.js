@@ -29,8 +29,8 @@ export default class ByBit {
 		let signature = this._signMessage('GET/realtime' + expires);
 		let param = `api_key=${this.apiKey}&expires=${expires}&signature=${signature}`;
 		this.websocket = new WebSocket(`${this.socketUrl}?${param}`);
-		this.websocket.onmessage = (msg) => this._handleWebsocketMsg(msg).bind(this);
-		this.websocket.onerror = (msg) => console.log("Websocket Error", msg);
+		this.websocket.onmessage = function(msg) { this._handleWebsocketMsg(msg) }.bind(this);
+		this.websocket.onerror = function(msg){ console.log("Websocket Error", msg) };
 	}
     _handleWebsocketMsg(msg) {
         let data = JSON.parse(msg.data)
