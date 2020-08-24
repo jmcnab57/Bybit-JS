@@ -89,9 +89,20 @@ export function setTradingStop(data) {
 
 export function cancelConditionalOrder(data) {
 	let required = {
-		stop_order_id: "string"
+		symbol: "string"
 	};
-	return validateRequired(required, data);
+	let optional = {
+		stop_order_id: "string",
+		order_link_id: "string",
+	};
+	return validateOptional(optional, data) && validateRequired(required, data) ;
+}
+
+export function cancelConditionalOrdersAll(data) {
+	let required = {
+		symbol: "string"
+	};
+	return validateRequired(required, data) ;
 }
 
 export function getLeverage(data) {
