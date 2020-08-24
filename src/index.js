@@ -192,6 +192,18 @@ export default class ByBit {
 			}
 		});
 	}
+	
+	cancelConditionalOrdersAll(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.cancelConditionalOrdersAll(data)) {
+				this._handleRequest(data, "/v2/private/stop-order/cancelAll", "post")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});	
+	}
 
 	getLeverage(data) {
 		return new Promise((resolve, reject) => {
