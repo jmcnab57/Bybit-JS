@@ -8,7 +8,9 @@ exports.getActiveOrders = getActiveOrders;
 exports.cancelActiveOrder = cancelActiveOrder;
 exports.placeConditionalOrder = placeConditionalOrder;
 exports.getConditionalOrders = getConditionalOrders;
+exports.setTradingStop = setTradingStop;
 exports.cancelConditionalOrder = cancelConditionalOrder;
+exports.cancelConditionalOrdersAll = cancelConditionalOrdersAll;
 exports.getLeverage = getLeverage;
 exports.updateLeverage = updateLeverage;
 exports.getPositions = getPositions;
@@ -19,10 +21,12 @@ exports.getNextFundingRate = getNextFundingRate;
 exports.getOrderInfo = getOrderInfo;
 exports.getSymbols = getSymbols;
 exports.getKline = getKline;
+exports.getTickers = getTickers;
+exports.getOrderbook = getOrderbook;
 
 var _lodash = require("lodash");
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function placeActiveOrder(data) {
   var required = {
@@ -98,9 +102,32 @@ function getConditionalOrders(data) {
   return validateOptional(optional, data);
 }
 
+function setTradingStop(data) {
+  var required = {
+    symbol: "string"
+  };
+  var optional = {
+    take_profit: "string",
+    stop_loss: "string",
+    trailing_stop: "string"
+  };
+  return validateOptional(optional, data) && validateRequired(required, data);
+}
+
 function cancelConditionalOrder(data) {
   var required = {
-    stop_order_id: "string"
+    symbol: "string"
+  };
+  var optional = {
+    stop_order_id: "string",
+    order_link_id: "string"
+  };
+  return validateOptional(optional, data) && validateRequired(required, data);
+}
+
+function cancelConditionalOrdersAll(data) {
+  var required = {
+    symbol: "string"
   };
   return validateRequired(required, data);
 }
@@ -171,6 +198,17 @@ function getKline(data) {
     limit: "number"
   };
   return validateOptional(optional, data) && validateRequired(required, data);
+}
+
+function getTickers(data) {
+  return (0, _lodash.isNil)(data) ? true : false;
+}
+
+function getOrderbook(data) {
+  var required = {
+    symbol: "string"
+  };
+  return validateRequired(required, data);
 }
 
 function validateRequired(required, data) {
