@@ -8,9 +8,9 @@ exports.getActiveOrders = getActiveOrders;
 exports.cancelActiveOrder = cancelActiveOrder;
 exports.placeConditionalOrder = placeConditionalOrder;
 exports.getConditionalOrders = getConditionalOrders;
-exports.setTradingStop = setTradingStop;
 exports.cancelConditionalOrder = cancelConditionalOrder;
 exports.cancelConditionalOrdersAll = cancelConditionalOrdersAll;
+exports.setTradingStop = setTradingStop;
 exports.getLeverage = getLeverage;
 exports.updateLeverage = updateLeverage;
 exports.getPositions = getPositions;
@@ -102,18 +102,6 @@ function getConditionalOrders(data) {
   return validateOptional(optional, data);
 }
 
-function setTradingStop(data) {
-  var required = {
-    symbol: "string"
-  };
-  var optional = {
-    take_profit: "string",
-    stop_loss: "string",
-    trailing_stop: "string"
-  };
-  return validateOptional(optional, data) && validateRequired(required, data);
-}
-
 function cancelConditionalOrder(data) {
   var required = {
     symbol: "string"
@@ -130,6 +118,18 @@ function cancelConditionalOrdersAll(data) {
     symbol: "string"
   };
   return validateRequired(required, data);
+}
+
+function setTradingStop(data) {
+  var required = {
+    symbol: "string"
+  };
+  var optional = {
+    take_profit: "number",
+    stop_loss: "number",
+    trailing_stop: "number"
+  };
+  return validateOptional(optional, data) && validateRequired(required, data);
 }
 
 function getLeverage(data) {

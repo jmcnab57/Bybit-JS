@@ -253,13 +253,26 @@ var ByBit = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "getConditionalOrders",
-    value: function getConditionalOrders(data) {
+    key: "cancelConditionalOrdersAll",
+    value: function cancelConditionalOrdersAll(data) {
       var _this6 = this;
 
       return new Promise(function (resolve, reject) {
+        if (Validate.cancelConditionalOrdersAll(data)) {
+          _this6._handleRequest(data, "/v2/private/stop-order/cancelAll", "post").then(resolve)["catch"](reject);
+        } else {
+          reject(Errors.invalidField);
+        }
+      });
+    }
+  }, {
+    key: "getConditionalOrders",
+    value: function getConditionalOrders(data) {
+      var _this7 = this;
+
+      return new Promise(function (resolve, reject) {
         if (Validate.getConditionalOrders(data)) {
-          _this6._handleRequest(data, "/open-api/stop-order/list").then(resolve)["catch"](reject);
+          _this7._handleRequest(data, "/open-api/stop-order/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -268,24 +281,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "cancelConditionalOrder",
     value: function cancelConditionalOrder(data) {
-      var _this7 = this;
-
-      return new Promise(function (resolve, reject) {
-        if (Validate.cancelConditionalOrder(data)) {
-          _this7._handleRequest(data, "/open-api/stop-order/cancel", "post").then(resolve)["catch"](reject);
-        } else {
-          reject(Errors.invalidField);
-        }
-      });
-    }
-  }, {
-    key: "cancelConditionalOrdersAll",
-    value: function cancelConditionalOrdersAll(data) {
       var _this8 = this;
 
       return new Promise(function (resolve, reject) {
-        if (Validate.cancelConditionalOrdersAll(data)) {
-          _this8._handleRequest(data, "/v2/private/stop-order/cancelAll", "post").then(resolve)["catch"](reject);
+        if (Validate.cancelConditionalOrder(data)) {
+          _this8._handleRequest(data, "/open-api/stop-order/cancel", "post").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -344,26 +344,26 @@ var ByBit = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "setTradingStop",
-    value: function setTradingStop(data) {
+    key: "getFundingRate",
+    value: function getFundingRate(data) {
       var _this13 = this;
 
       return new Promise(function (resolve, reject) {
-        if (Validate.setTradingStop(data)) {
-          _this13._handleRequest(data, "/open-api/position/trading-stop").then(resolve)["catch"](reject);
+        if (Validate.getFundingRate(data)) {
+          _this13._handleRequest(data, "/open-api/funding/prev-funding-rate").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
       });
     }
   }, {
-    key: "getFundingRate",
-    value: function getFundingRate(data) {
+    key: "setTradingStop",
+    value: function setTradingStop(data) {
       var _this14 = this;
 
       return new Promise(function (resolve, reject) {
-        if (Validate.getFundingRate(data)) {
-          _this14._handleRequest(data, "/open-api/funding/prev-funding-rate").then(resolve)["catch"](reject);
+        if (Validate.setTradingStop(data)) {
+          _this14._handleRequest(data, "/open-api/position/trading-stop").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
