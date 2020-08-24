@@ -75,18 +75,6 @@ export function getConditionalOrders(data) {
 	return validateOptional(optional, data);
 }
 
-export function setTradingStop(data) {
-	let required = {
-		symbol: "string"
-	};
-	let optional = {
-		take_profit: "string",
-		stop_loss: "string",
-		trailing_stop: "string",
-	};
-	return validateOptional(optional, data)  && validateRequired(required, data);
-}
-
 export function cancelConditionalOrder(data) {
 	let required = {
 		symbol: "string"
@@ -103,6 +91,18 @@ export function cancelConditionalOrdersAll(data) {
 		symbol: "string"
 	};
 	return validateRequired(required, data) ;
+}
+
+export function setTradingStop(data) {
+	let required = {
+		symbol: "string"
+	};
+	let optional = {
+		take_profit: "number",
+		stop_loss: "number",
+		trailing_stop: "number",
+	};
+	return validateOptional(optional, data)  && validateRequired(required, data);
 }
 
 export function getLeverage(data) {

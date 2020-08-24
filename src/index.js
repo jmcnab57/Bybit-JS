@@ -24,6 +24,7 @@ export default class ByBit {
 		this._initWebsocket();
 		// TODO this.websocket.onclose
 	}
+
 	_initWebsocket(){
 		let expires = new Date().getTime() + 10000;
 		let signature = this._signMessage('GET/realtime' + expires);
@@ -32,6 +33,7 @@ export default class ByBit {
 		this.websocket.onmessage = function(msg) { this._handleWebsocketMsg(msg) }.bind(this);
 		this.websocket.onerror = function(msg){ console.log("Websocket Error", msg) };
 	}
+
     _handleWebsocketMsg(msg) {
         let data = JSON.parse(msg.data)
         if (data.success == false) {
@@ -45,12 +47,14 @@ export default class ByBit {
             // }
         } else if ('topic' in data) {
 			let topic = this.subscriptions[data.topic] //.split('.')[0]];
-			for (var key in topic)
+			for (var key in topic)	{
 				topic[key](data.data);
+			}
         } else {
             console.log(data)
         }
     }
+
 	//Returns a HEX HMAC_SHA256 of the message
 	_signMessage(message) {
 		return createHmac("sha256", this.apiSecret)
@@ -169,6 +173,17 @@ export default class ByBit {
 		});
 	}
 
+	cancelConditionalOrdersAll(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.cancelConditionalOrdersAll(data)) {
+				this._handleRequest(data, "/v2/private/stop-order/cancelAll", "post")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});	}
+
 	getConditionalOrders(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getConditionalOrders(data)) {
@@ -191,18 +206,6 @@ export default class ByBit {
 				reject(Errors.invalidField);
 			}
 		});
-	}
-	
-	cancelConditionalOrdersAll(data) {
-		return new Promise((resolve, reject) => {
-			if (Validate.cancelConditionalOrdersAll(data)) {
-				this._handleRequest(data, "/v2/private/stop-order/cancelAll", "post")
-					.then(resolve)
-					.catch(reject);
-			} else {
-				reject(Errors.invalidField);
-			}
-		});	
 	}
 
 	getLeverage(data) {
@@ -252,17 +255,7 @@ export default class ByBit {
 			}
 		});
 	}
-	setTradingStop(data){
-		return new Promise((resolve, reject) => {
-			if (Validate.setTradingStop(data)) {
-				this._handleRequest(data, "/open-api/position/trading-stop")
-					.then(resolve)
-					.catch(reject);
-			} else {
-				reject(Errors.invalidField);
-			}
-		});		
-	}
+
 	getFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getFundingRate(data)) {
@@ -275,6 +268,17 @@ export default class ByBit {
 		});
 	}
 
+	setTradingStop(data){
+		return new Promise((resolve, reject) => {
+			if (Validate.setTradingStop(data)) {
+				this._handleRequest(data, "/open-api/position/trading-stop")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
 	getPrevFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getPrevFundingRate(data)) {
