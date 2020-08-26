@@ -101,6 +101,7 @@ export function setTradingStop(data) {
 		take_profit: "number",
 		stop_loss: "number",
 		trailing_stop: "number",
+		new_trailing_active: "number"
 	};
 	return validateOptional(optional, data)  && validateRequired(required, data);
 }
@@ -150,6 +151,34 @@ export function getNextFundingRate(data) {
 	return validateRequired(required, data);
 }
 
+export function getTradeRecords(data) {
+	let required = {
+		symbol: "string"
+	};
+	let optional = {
+		order_id: "string",
+		start_time: "number",
+		page: "number",
+		limit: "number",
+		order: "string"
+	};
+	return validateOptional(optional, data) && validateRequired(required, data);
+}
+
+export function getPL(data) {
+	let required = {
+		symbol: "string"
+	};
+	let optional = {
+		start_time: "number",
+		end_time: "number",
+		exec_type: "string",  //Trade, AdlTradel, Funding, BustTrade
+		page: "number",
+		limit: "number",
+	};
+	return validateOptional(optional, data) && validateRequired(required, data);
+}
+
 export function getOrderInfo(data) {
 	let required = {
 		order_id: "string"
@@ -160,6 +189,20 @@ export function getOrderInfo(data) {
 export function getSymbols(data) {
 	return isNil(data) ? true : false;
 }
+
+export function getWalletRecords(data) {
+	let optional = {
+		start_date: "string",
+		end_date: "string",
+		currency: "string",
+		coin: "string",
+		wallet_fund_type: "string",
+		page: "string",
+		limit: "number"
+	};
+	return validateOptional(optional, data);
+}
+
 export function getKline(data) {
 	let required = {
 		symbol: "string",

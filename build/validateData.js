@@ -18,8 +18,11 @@ exports.updatePositionMargin = updatePositionMargin;
 exports.getFundingRate = getFundingRate;
 exports.getPrevFundingRate = getPrevFundingRate;
 exports.getNextFundingRate = getNextFundingRate;
+exports.getTradeRecords = getTradeRecords;
+exports.getPL = getPL;
 exports.getOrderInfo = getOrderInfo;
 exports.getSymbols = getSymbols;
+exports.getWalletRecords = getWalletRecords;
 exports.getKline = getKline;
 exports.getTickers = getTickers;
 exports.getOrderbook = getOrderbook;
@@ -127,7 +130,8 @@ function setTradingStop(data) {
   var optional = {
     take_profit: "number",
     stop_loss: "number",
-    trailing_stop: "number"
+    trailing_stop: "number",
+    new_trailing_active: "number"
   };
   return validateOptional(optional, data) && validateRequired(required, data);
 }
@@ -177,6 +181,35 @@ function getNextFundingRate(data) {
   return validateRequired(required, data);
 }
 
+function getTradeRecords(data) {
+  var required = {
+    symbol: "string"
+  };
+  var optional = {
+    order_id: "string",
+    start_time: "number",
+    page: "number",
+    limit: "number",
+    order: "string"
+  };
+  return validateOptional(optional, data) && validateRequired(required, data);
+}
+
+function getPL(data) {
+  var required = {
+    symbol: "string"
+  };
+  var optional = {
+    start_time: "number",
+    end_time: "number",
+    exec_type: "string",
+    //Trade, AdlTradel, Funding, BustTrade
+    page: "number",
+    limit: "number"
+  };
+  return validateOptional(optional, data) && validateRequired(required, data);
+}
+
 function getOrderInfo(data) {
   var required = {
     order_id: "string"
@@ -186,6 +219,19 @@ function getOrderInfo(data) {
 
 function getSymbols(data) {
   return (0, _lodash.isNil)(data) ? true : false;
+}
+
+function getWalletRecords(data) {
+  var optional = {
+    start_date: "string",
+    end_date: "string",
+    currency: "string",
+    coin: "string",
+    wallet_fund_type: "string",
+    page: "string",
+    limit: "number"
+  };
+  return validateOptional(optional, data);
 }
 
 function getKline(data) {
