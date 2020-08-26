@@ -243,7 +243,6 @@ export default class ByBit {
 			}
 		});
 	}
-
 	updatePositionMargin(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.updatePositionMargin(data)) {
@@ -255,7 +254,6 @@ export default class ByBit {
 			}
 		});
 	}
-
 	getFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getFundingRate(data)) {
@@ -267,11 +265,32 @@ export default class ByBit {
 			}
 		});
 	}
-
 	setTradingStop(data){
 		return new Promise((resolve, reject) => {
 			if (Validate.setTradingStop(data)) {
 				this._handleRequest(data, "/open-api/position/trading-stop")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
+	getTradeRecords(data){
+		return new Promise((resolve, reject) => {
+			if (Validate.getTradeRecords(data)) {
+				this._handleRequest(data, "/v2/private/execution/list")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
+	getPL(data){
+		return new Promise((resolve, reject) => {
+			if (Validate.getPL(data)) {
+				this._handleRequest(data, "/v2/private/trade/closed-pnl/list")
 					.then(resolve)
 					.catch(reject);
 			} else {
@@ -290,7 +309,6 @@ export default class ByBit {
 			}
 		});
 	}
-
 	getNextFundingRate(data) {
 		return new Promise((resolve, reject) => {
 			if (Validate.getNextFundingRate(data)) {
@@ -319,6 +337,17 @@ export default class ByBit {
 		return new Promise((resolve, reject) => {
 			if (Validate.getSymbols(data)) {
 				this._handleRequest(data, "v2/public/symbols")
+					.then(resolve)
+					.catch(reject);
+			} else {
+				reject(Errors.invalidField);
+			}
+		});
+	}
+	getWalletRecords(data) {
+		return new Promise((resolve, reject) => {
+			if (Validate.getWalletRecords(data)) {
+				this._handleRequest(data, "open-api/wallet/fund/records")
 					.then(resolve)
 					.catch(reject);
 			} else {

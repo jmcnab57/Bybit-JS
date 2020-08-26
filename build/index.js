@@ -370,13 +370,39 @@ var ByBit = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "getPrevFundingRate",
-    value: function getPrevFundingRate(data) {
+    key: "getTradeRecords",
+    value: function getTradeRecords(data) {
       var _this15 = this;
 
       return new Promise(function (resolve, reject) {
+        if (Validate.getTradeRecords(data)) {
+          _this15._handleRequest(data, "/v2/private/execution/list").then(resolve)["catch"](reject);
+        } else {
+          reject(Errors.invalidField);
+        }
+      });
+    }
+  }, {
+    key: "getPL",
+    value: function getPL(data) {
+      var _this16 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (Validate.getPL(data)) {
+          _this16._handleRequest(data, "/v2/private/trade/closed-pnl/list").then(resolve)["catch"](reject);
+        } else {
+          reject(Errors.invalidField);
+        }
+      });
+    }
+  }, {
+    key: "getPrevFundingRate",
+    value: function getPrevFundingRate(data) {
+      var _this17 = this;
+
+      return new Promise(function (resolve, reject) {
         if (Validate.getPrevFundingRate(data)) {
-          _this15._handleRequest(data, "/open-api/funding/prev-funding").then(resolve)["catch"](reject);
+          _this17._handleRequest(data, "/open-api/funding/prev-funding").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -385,11 +411,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getNextFundingRate",
     value: function getNextFundingRate(data) {
-      var _this16 = this;
+      var _this18 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getNextFundingRate(data)) {
-          _this16._handleRequest(data, "/open-api/funding/predicted-funding").then(resolve)["catch"](reject);
+          _this18._handleRequest(data, "/open-api/funding/predicted-funding").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -398,11 +424,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getOrderInfo",
     value: function getOrderInfo(data) {
-      var _this17 = this;
+      var _this19 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getOrderInfo(data)) {
-          _this17._handleRequest(data, "/v2/private/execution/list").then(resolve)["catch"](reject);
+          _this19._handleRequest(data, "/v2/private/execution/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -411,11 +437,24 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getSymbols",
     value: function getSymbols(data) {
-      var _this18 = this;
+      var _this20 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getSymbols(data)) {
-          _this18._handleRequest(data, "v2/public/symbols").then(resolve)["catch"](reject);
+          _this20._handleRequest(data, "v2/public/symbols").then(resolve)["catch"](reject);
+        } else {
+          reject(Errors.invalidField);
+        }
+      });
+    }
+  }, {
+    key: "getWalletRecords",
+    value: function getWalletRecords(data) {
+      var _this21 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (Validate.getWalletRecords(data)) {
+          _this21._handleRequest(data, "open-api/wallet/fund/records").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -424,11 +463,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getKline",
     value: function getKline(data) {
-      var _this19 = this;
+      var _this22 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getKline(data)) {
-          _this19._handleRequest(data, "v2/public/kline/list").then(resolve)["catch"](reject);
+          _this22._handleRequest(data, "v2/public/kline/list").then(resolve)["catch"](reject);
         } else {
           reject(Errors.invalidField);
         }
@@ -437,11 +476,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getTickers",
     value: function getTickers(data) {
-      var _this20 = this;
+      var _this23 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getTickers(data)) {
-          _this20._handleRequest({}, "v2/public/tickers").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
+          _this23._handleRequest({}, "v2/public/tickers").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
 
         } else {
           reject(Errors.invalidField);
@@ -451,11 +490,11 @@ var ByBit = /*#__PURE__*/function () {
   }, {
     key: "getOrderbook",
     value: function getOrderbook(data) {
-      var _this21 = this;
+      var _this24 = this;
 
       return new Promise(function (resolve, reject) {
         if (Validate.getOrderbook(data)) {
-          _this21._handleRequest(data, "v2/public/orderBook/L2").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
+          _this24._handleRequest(data, "v2/public/orderBook/L2").then(resolve)["catch"](reject); //r => {return r.find(d => d.symbol === symbol)}
 
         } else {
           reject(Errors.invalidField);
